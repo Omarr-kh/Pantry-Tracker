@@ -35,8 +35,10 @@ export default function Home() {
   };
 
   const addItem = async (item, inputQuantity) => {
+    if (!item || !inputQuantity) return;
     const docRef = doc(collection(firestore, 'items'), item);
     const docSnap = await getDoc(docRef);
+
 
     if (docSnap.exists()) {
       const { quantity } = docSnap.data();
@@ -81,7 +83,8 @@ export default function Home() {
       width="100vw"
       height="100vh"
       display="flex"
-      bgcolor="#efeff5"
+      // bgcolor="#efeff5"
+      bgcolor="#B87333"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
@@ -112,7 +115,8 @@ export default function Home() {
             }}
           />
           <Button
-            variant="outlined"
+            variant="contained"
+            color="success"
             onClick={() => {
               addItem(itemName, quantity);
               setItemName('');
@@ -123,11 +127,12 @@ export default function Home() {
           </Button>
         </Stack>
       </Box>
-      <Box border="2px solid #333" bgcolor="white">
+      <Box border="2px solid #333" width="95%">
         <Box
-          width="900px"
+          width="100%"
           height="100px"
-          bgcolor="#AAAEEE"
+          bgcolor="#023020"
+          color="grey"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -135,9 +140,10 @@ export default function Home() {
           <Typography variant="h2">Items List</Typography>
         </Box>
         <Stack
-          width="900px"
+          width="100%"
           height="400px"
           spacing={1}
+          bgcolor="#A3876A"
           overflow="auto"
           justifyContent="space-between"
         >
@@ -192,7 +198,8 @@ export default function Home() {
                     Remove
                   </Button>
                   <Button
-                    variant="text"
+                    variant="contained"
+                    color="error"
                     onClick={() => {
                       deleteItem(item.name);
                     }}
