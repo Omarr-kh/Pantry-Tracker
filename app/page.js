@@ -9,8 +9,10 @@ import {
   getDocs,
   query,
   setDoc,
-  doc
+  doc,
 } from 'firebase/firestore';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import { Box, Stack, Typography, Button, TextField } from '@mui/material';
 
 export default function Home() {
@@ -56,6 +58,16 @@ export default function Home() {
       } else {
         await setDoc(docRef, { quantity: quantity - 1 });
       }
+    }
+    updateItems();
+  };
+
+  const deleteItem = async (item) => {
+    const docRef = doc(collection(firestore, 'items'), item);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      await deleteDoc(docRef);
     }
     updateItems();
   };
@@ -122,7 +134,13 @@ export default function Home() {
         >
           <Typography variant="h2">Items List</Typography>
         </Box>
-        <Stack width="900px" height="400px" spacing={1} overflow="auto">
+        <Stack
+          width="900px"
+          height="400px"
+          spacing={1}
+          overflow="auto"
+          justifyContent="space-between"
+        >
           {items.map((item) => {
             return (
               <Box
@@ -135,13 +153,28 @@ export default function Home() {
                 bgColor="#f0f0f0"
                 padding={5}
               >
-                <Typography variant="h4" color="#333" textAlign="center">
+                <Typography
+                  variant="h4"
+                  color="#333"
+                  textAlign="left"
+                  width="200px"
+                >
                   {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
                 </Typography>
-                <Typography variant="h4" color="#333" textAlign="center">
+                <Typography
+                  variant="h4"
+                  color="#333"
+                  textAlign="center"
+                  width="200px"
+                >
                   {item.quantity}
                 </Typography>
-                <Stack direction="row" spacing={2}>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  justifyContent="right"
+                  width="300px"
+                >
                   <Button
                     variant="contained"
                     onClick={() => {
@@ -157,6 +190,16 @@ export default function Home() {
                     }}
                   >
                     Remove
+                  </Button>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      deleteItem(item.name);
+                    }}
+                  >
+                    <IconButton aria-label="delete">
+                      <DeleteIcon fontSize="inherit" />
+                    </IconButton>
                   </Button>
                 </Stack>
               </Box>
